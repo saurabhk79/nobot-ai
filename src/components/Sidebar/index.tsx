@@ -11,9 +11,9 @@ const Sidebar: React.FC = () => {
         <div>{/* new icon here */}</div>
       </div>
 
-      <div className={styles.pastTag}>
+      <span className={styles.pastTag}>
         Past Conversation
-      </div>
+      </span>
 
       {/* Conversation history here */}
     </div>

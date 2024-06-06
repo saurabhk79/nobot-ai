@@ -1,5 +1,5 @@
 import React from "react";
-import styles from "./sidebar.module.css";
+import styles from "./startplate.module.css";
 
 const StartPlate: React.FC = () => {
   return (

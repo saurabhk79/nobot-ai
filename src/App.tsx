@@ -11,7 +11,7 @@ const App: React.FC = () => {
       <Sidebar />
 
       <div className="chat-area">
-        <h1>Bot AI</h1>
+        <h2>Bot AI</h2>
 
         <StartPlate />
         <InputBox />
