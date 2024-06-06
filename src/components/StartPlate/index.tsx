@@ -1,26 +1,30 @@
 import React from "react";
 import styles from "./startplate.module.css";
 
+const cardData: string[] = [
+  "Hi, what is the weather",
+  "Hi, what is my location",
+  "Hi, what is the temperature",
+  "Hi, how are you",
+];
 const StartPlate: React.FC = () => {
   return (
-    <div className={styles.startPlate}>
+    <>
       <div className={styles.label}>
         <h2>How can I help you Today?</h2>
         {/* logo here */}
       </div>
 
       <div className={styles.cardsList}>
-        {Array(4)
-          .fill(-1)
-          .map((_, idx) => (
-            <Card
-              title="Hello"
-              desc="Get immediate AI generated response"
-              key={idx}
-            />
-          ))}
+        {cardData.map((title, idx) => (
+          <Card
+            title={title}
+            desc="Get immediate AI generated response"
+            key={idx}
+          />
+        ))}
       </div>
-    </div>
+    </>
   );
 };
 
