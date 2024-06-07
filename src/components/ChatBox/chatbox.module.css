@@ -2,4 +2,14 @@
   height: calc(100vh - 80px);
   display: flex;
   flex-direction: column;
+  gap: 12px;
+  overflow: auto;
+}
+
+.chatCard {
+  height: 100px;
+  border-radius: 20px;
+  background: #D7C7F421;
+  margin: 0 24px;
+  padding: 18px;
 }

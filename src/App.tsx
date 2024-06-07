@@ -21,6 +21,7 @@ export interface ChatInterface {
 const App: React.FC = () => {
   const [showPlate, setShowPlate] = useState<boolean>(false);
   const [chat, setChat] = useState<ChatInterface[]>([]);
+  const [chatLoading, setChatLoading] = useState(false)
 
   const handleShowPlate = (value: boolean) => {
     setShowPlate(value);
@@ -31,14 +32,31 @@ const App: React.FC = () => {
       handleShowPlate(false);
 
       setChat((prevState) => [...prevState, userChatObj]);
-      handleBotResponse(userChatObj.userText);
+      setChatLoading(true);
+      setTimeout(() => {
+        if (typeof userChatObj.userText === "string") {
+          handleBotResponse(userChatObj.userText);
+          setChatLoading(false);
+        }
+      }, 2000);
     }
   };
 
   const handleBotResponse = (text: string) => {
-    console.log(text, "==================>");
-    console.log(data);
-    // checking answer and adding to chatbox
+    const botResponse = data.find(
+      (item) => item.question.toLowerCase() === text.toLowerCase()
+    );
+
+    // Generate the bot response object
+    const botResponseObj: ChatInterface = {
+      type: "bot",
+      botText: botResponse
+        ? botResponse.response
+        : "As an AI Language Model, I don’t have the details",
+    };
+
+    // Add bot response to chat state
+    setChat((prevState) => [...prevState, botResponseObj]);
   };
   return (
     <div className="app">
@@ -48,7 +66,7 @@ const App: React.FC = () => {
         <h2>Bot AI</h2>
 
         <StartPlate showPlate={showPlate} chats={chat} />
-        <InputBox addUserChat={addUserChat} />
+        <InputBox addUserChat={addUserChat} chatLoading={chatLoading} />
       </div>
     </div>
   );

@@ -4,6 +4,8 @@ import styles from "./chatbox.module.css";
 import StartPlate from "../StartPlate";
 import { ChatInterface } from "../../App";
 
+import { GoThumbsdown, GoThumbsup } from "react-icons/go";
+
 interface ChatBoxInterface {
   showPlate: boolean;
   chats: ChatInterface[];
@@ -18,7 +20,7 @@ const ChatBox: React.FC<ChatBoxInterface> = ({ showPlate, chats }) => {
       ) : (
         <>
           {chats.map((chat) => {
-            return <Chat data={chat} />;
+            return <Chat data={chat} key={chat.id} />;
           })}
         </>
       )}
@@ -44,7 +46,11 @@ const Chat: React.FC<ChatProps> = ({ data }) => {
         <div className={styles.others}>
           <small>{data.timing}</small>
 
-          {data.type === "bot" && <span></span>}
+          {data.type === "bot" && (
+            <span>
+              <GoThumbsup /> <GoThumbsdown />
+            </span>
+          )}
         </div>
 
         <b>
