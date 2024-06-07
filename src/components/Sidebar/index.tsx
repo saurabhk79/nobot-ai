@@ -1,8 +1,7 @@
-import React from "react";
+import React, { useState } from "react";
 import styles from "./sidebar.module.css";
 import { ChatHistory } from "../../App";
-
-import { LiaEdit } from "react-icons/lia";
+import { LiaChevronCircleRightSolid, LiaEdit } from "react-icons/lia";
 import bot from "../../assets/bot.png";
 
 interface SidebarProps {
@@ -15,32 +14,51 @@ const Sidebar: React.FC<SidebarProps> = ({
   handleNewChat,
   handleChangeChat,
 }) => {
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+
+  const toggleSidebar = () => {
+    setIsSidebarOpen(!isSidebarOpen);
+  };
+
   return (
-    <div className={styles.sidebar}>
-      <div className={styles.sidebarTop}>
-        <img src={bot} alt="bot" />
+    <>
+      <LiaChevronCircleRightSolid
+        className={styles.menuicon}
+        size={30}
+        onClick={toggleSidebar}
+      />
 
-        <span>New Chat</span>
-        <LiaEdit onClick={handleNewChat} style={{ cursor: "pointer" }} />
+      <div className={`${styles.sidebar} ${isSidebarOpen ? styles.open : ""}`}>
+        <div className={styles.sidebarTop}>
+          <img src={bot} alt="bot" />
+          <span>New Chat</span>
+          <LiaEdit onClick={handleNewChat} style={{ cursor: "pointer" }} />
+        </div>
+
+        <small className={styles.pastTag}>Past Conversation</small>
+
+        <div className={styles.chatHistory}>
+          {chatHistory
+            .slice()
+            .reverse()
+            .map((history) => {
+              return (
+                <span
+                  className={styles.otherChats}
+                  onClick={() => handleChangeChat(history.id)}
+                  key={history.id}
+                >
+                  {history.name}
+                </span>
+              );
+            })}
+        </div>
+
+        <button className={styles.closeButton} onClick={toggleSidebar}>
+          Close
+        </button>
       </div>
-
-      <small className={styles.pastTag}>Past Conversation</small>
-
-      {chatHistory
-        .slice()
-        .reverse()
-        .map((history) => {
-          return (
-            <span
-              className={styles.otherChats}
-              onClick={() => handleChangeChat(history.id)}
-              key={history.id}
-            >
-              {history.name}
-            </span>
-          );
-        })}
-    </div>
+    </>
   );
 };
 
