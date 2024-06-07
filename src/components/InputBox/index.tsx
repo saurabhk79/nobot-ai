@@ -24,7 +24,10 @@ const InputBox: React.FC<InputBoxProps> = ({
         disabled={chatLoading}
       />
       <button
-        onClick={() => addUserChat({ type: "user", userText: text })}
+        onClick={() => {
+          addUserChat({ type: "user", userText: text });
+          setText("");
+        }}
         disabled={chatLoading}
       >
         Ask

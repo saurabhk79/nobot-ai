@@ -1,11 +1,13 @@
 import React, { useState } from "react";
 
 import Sidebar from "./components/Sidebar";
-import StartPlate from "./components/ChatBox";
 import InputBox from "./components/InputBox";
 
 import data from "./data.json";
 import "./App.css";
+import ChatBox from "./components/ChatBox";
+import FeedbackModal from "./components/FeedbackModal";
+
 export interface ChatInterface {
   id?: number;
   type: string;
@@ -24,12 +26,24 @@ export interface ChatHistory {
   chats: ChatInterface[];
 }
 
+interface FeedbackInterface {
+  id: number;
+  isLiked?: boolean | undefined;
+  feedback: string;
+}
+
 const App: React.FC = () => {
   const [showPlate, setShowPlate] = useState<boolean>(false);
   const [chat, setChat] = useState<ChatInterface[]>([]);
   const [chatLoading, setChatLoading] = useState(false);
 
   const [chatHistory, setChatHistory] = useState<ChatHistory[]>([]);
+  const [isModal, setIsModal] = useState(false);
+  const [feedback, setFeedback] = useState<FeedbackInterface>({
+    id: 0,
+    isLiked: undefined,
+    feedback: "",
+  });
 
   const handleShowPlate = (value: boolean) => {
     setShowPlate(value);
@@ -39,7 +53,20 @@ const App: React.FC = () => {
     if (userChatObj.userText) {
       handleShowPlate(false);
 
-      setChat((prevState) => [...prevState, userChatObj]);
+      const randomId = Math.ceil(Math.random() * 1000);
+      const time = Date.now();
+      const date = new Date(time);
+
+      const formattedTime = date.toLocaleTimeString("en-US", {
+        hour: "numeric",
+        minute: "numeric",
+        hour12: true,
+      });
+
+      setChat((prevState) => [
+        ...prevState,
+        { ...userChatObj, id: randomId, timing: formattedTime },
+      ]);
       setChatLoading(true);
       setTimeout(() => {
         if (typeof userChatObj.userText === "string") {
@@ -55,20 +82,31 @@ const App: React.FC = () => {
       (item) => item.question.toLowerCase() === text.toLowerCase()
     );
 
-    // Generate the bot response object
+    const randomId = Math.ceil(Math.random() * 1000);
+    const time = Date.now();
+    const date = new Date(time);
+
+    const formattedTime = date.toLocaleTimeString("en-US", {
+      hour: "numeric",
+      minute: "numeric",
+      hour12: true,
+    });
+
     const botResponseObj: ChatInterface = {
       type: "bot",
       botText: botResponse
         ? botResponse.response
         : "As an AI Language Model, I don’t have the details",
+      id: randomId,
+      timing: formattedTime,
     };
 
-    // Add bot response to chat state
     setChat((prevState) => [...prevState, botResponseObj]);
   };
 
   const saveChatHistory = () => {
-    if (chat.length && chatHistory.length) {
+    if (chatHistory.length) {
+      console.log(chat[0].id, chatHistory[chatHistory.length - 1].chats[0].id);
       const currentChatFirstId = chat[0].id;
       const lastChatFirstId = chatHistory[chatHistory.length - 1].chats[0].id;
 
@@ -77,6 +115,7 @@ const App: React.FC = () => {
           id: chatHistory.length + 1,
           chats: chat,
         };
+
         setChatHistory([
           ...chatHistory,
           {
@@ -95,20 +134,93 @@ const App: React.FC = () => {
       ]);
     }
   };
+
+  const handleNewChat = () => {
+    saveChatHistory();
+
+    setChat([]);
+    handleShowPlate(true);
+  };
+
+  const handleChangeChat = (id: number) => {
+    // saveChatHistory();
+    setShowPlate(false);
+
+    const changeChat: ChatInterface[] | undefined = chatHistory.find(
+      (history) => history.id === id
+    )?.chats;
+
+    if (typeof changeChat !== "undefined") {
+      setChat(changeChat);
+    }
+  };
+
+  const handleOpenModal = (
+    value: boolean,
+    liked?: boolean,
+    chatId?: number
+  ) => {
+    setIsModal(value);
+
+    if (chatId) {
+      setFeedback({ ...feedback, isLiked: liked, id: chatId });
+    }
+  };
+
+  const handleFeedback = (text: string) => {
+    if (text) {
+      const updatedFeedback = { ...feedback, feedback: text };
+
+      setFeedback(updatedFeedback);
+
+      const newChats = chat.map((ch) => {
+        if (ch.id === updatedFeedback.id) {
+          return {
+            ...ch,
+            ...updatedFeedback,
+          };
+        }
+        return ch;
+      });
+
+      setChat(newChats);
+      setFeedback({
+        id: 0,
+        isLiked: undefined,
+        feedback: "",
+      });
+    }
+  };
+
   return (
     <div className="app">
-      <Sidebar chatHistory={chatHistory} />
+      <Sidebar
+        chatHistory={chatHistory}
+        handleNewChat={handleNewChat}
+        handleChangeChat={handleChangeChat}
+      />
 
       <div className="chat-area">
         <h2>Bot AI</h2>
 
-        <StartPlate showPlate={showPlate} chats={chat} />
+        <ChatBox
+          showPlate={showPlate}
+          chats={chat}
+          handleOpenModal={handleOpenModal}
+        />
         <InputBox
           addUserChat={addUserChat}
           chatLoading={chatLoading}
           saveChatHistory={saveChatHistory}
         />
       </div>
+
+      {isModal && (
+        <FeedbackModal
+          handleOpenModal={handleOpenModal}
+          handleFeedback={handleFeedback}
+        />
+      )}
     </div>
   );
 };
