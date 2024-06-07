@@ -1,5 +1,6 @@
 import React from "react";
 import styles from "./startplate.module.css";
+import bot from "../../assets/bot.png";
 
 const cardData: string[] = [
   "Hi, what is the weather",
@@ -12,7 +13,7 @@ const StartPlate: React.FC = () => {
     <>
       <div className={styles.label}>
         <h2>How can I help you Today?</h2>
-        {/* logo here */}
+        <img src={bot} alt="bot" />
       </div>
 
       <div className={styles.cardsList}>

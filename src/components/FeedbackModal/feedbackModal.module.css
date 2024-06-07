@@ -18,6 +18,38 @@
   color: black;
 }
 
-.modalContent {
-  padding: 20px;
+.top {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 48px;
+}
+
+.top span {
+  font-size: x-large;
+}
+
+textarea {
+  width: 100%;
+}
+
+.subButton {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  margin-top: 16px;
+}
+
+.subButton button {
+  padding: 4px 16px;
+  border: none;
+  outline: none;
+  background-color: var(--color-bgc);
+  transition: all 0.3s ease-in-out;
+  cursor: pointer;
+}
+
+.subButton button:hover {
+  background-color: var(--color-secondary);
+
 }

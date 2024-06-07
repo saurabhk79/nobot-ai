@@ -3,6 +3,8 @@ import React from "react";
 import styles from "./chatbox.module.css";
 import StartPlate from "../StartPlate";
 import { ChatInterface } from "../../App";
+import user from "../../assets/user.png";
+import bot from "../../assets/bot.png";
 
 import { GoThumbsdown, GoThumbsup } from "react-icons/go";
 
@@ -52,7 +54,7 @@ interface ChatProps {
 const Chat: React.FC<ChatProps> = ({ data, handleOpenModal }) => {
   return (
     <div className={styles.chatCard}>
-      <div>{/* image here */}</div>
+      <img src={data.type === "user" ? user : bot} alt="dp" />
 
       <div>
         <h5>{data.type === "user" ? "You" : "Krishna AI"}</h5>
@@ -64,10 +66,19 @@ const Chat: React.FC<ChatProps> = ({ data, handleOpenModal }) => {
           {data.type === "bot" && (
             <span>
               <GoThumbsup
+                cursor={"pointer"}
                 onClick={() => handleOpenModal(true, true, data.id)}
-              />{" "}
+                style={{
+                  margin: "0 6px",
+                  color: data.isLiked ? "var(--color-primary)" : "",
+                }}
+              />
               <GoThumbsdown
+                cursor={"pointer"}
                 onClick={() => handleOpenModal(true, false, data.id)}
+                style={{
+                  color: data.isLiked === false ? "var(--color-primary)" : "",
+                }}
               />
             </span>
           )}

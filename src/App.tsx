@@ -33,7 +33,7 @@ interface FeedbackInterface {
 }
 
 const App: React.FC = () => {
-  const [showPlate, setShowPlate] = useState<boolean>(false);
+  const [showPlate, setShowPlate] = useState<boolean>(true);
   const [chat, setChat] = useState<ChatInterface[]>([]);
   const [chatLoading, setChatLoading] = useState(false);
 

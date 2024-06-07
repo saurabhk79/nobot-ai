@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import styles from "./feedbackModal.module.css";
+import bulb from "../../assets/bulb.png";
 
 interface FeedbackModalProps {
   handleOpenModal: (value: boolean, liked?: boolean, chatId?: number) => void;
@@ -20,16 +21,16 @@ const FeedbackModal: React.FC<FeedbackModalProps> = ({
   return (
     <div className={styles.modalOverlay}>
       <div className={styles.modal}>
-        <div className={styles.modalContent}>
           <div className={styles.top}>
-            <h3>Provide Additional Feedback</h3>
-            <h3 onClick={() => handleOpenModal(false)}>X</h3>
+            <div>
+              <img src={bulb} alt="bulb" />
+              <span>Provide Additional Feedback</span>
+            </div>
+            <span onClick={() => handleOpenModal(false)} style={{cursor: "pointer"}}>X</span>
           </div>
 
           <textarea
-            name=""
-            id=""
-            rows={30}
+            rows={6}
             value={feedbackText}
             onChange={(e) => setFeedbackText(e.target.value)}
           ></textarea>
@@ -37,7 +38,6 @@ const FeedbackModal: React.FC<FeedbackModalProps> = ({
           <div className={styles.subButton}>
             <button onClick={handleSubmit}>Submit</button>
           </div>
-        </div>
       </div>
     </div>
   );

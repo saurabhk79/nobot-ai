@@ -3,6 +3,7 @@ import styles from "./sidebar.module.css";
 import { ChatHistory } from "../../App";
 
 import { LiaEdit } from "react-icons/lia";
+import bot from "../../assets/bot.png";
 
 interface SidebarProps {
   chatHistory: ChatHistory[];
@@ -17,22 +18,21 @@ const Sidebar: React.FC<SidebarProps> = ({
   return (
     <div className={styles.sidebar}>
       <div className={styles.sidebarTop}>
-        <div>{/* logo here */}</div>
+        <img src={bot} alt="bot" />
 
         <span>New Chat</span>
-        <LiaEdit onClick={handleNewChat} />
+        <LiaEdit onClick={handleNewChat} style={{ cursor: "pointer" }} />
       </div>
 
-      <span className={styles.pastTag}>Past Conversation</span>
+      <small className={styles.pastTag}>Past Conversation</small>
 
-      {/* Conversation history here */}
       {chatHistory
         .slice()
         .reverse()
         .map((history) => {
           return (
             <span
-              className={styles.pastTag}
+              className={styles.otherChats}
               onClick={() => handleChangeChat(history.id)}
               key={history.id}
             >

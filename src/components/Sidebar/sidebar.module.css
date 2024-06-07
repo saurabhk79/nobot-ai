@@ -1,11 +1,19 @@
 .sidebar {
-    width: 200px;
+    width: 250px;
     min-height: 100vh;
 }
 
 .sidebarTop {
     background-color: var(--color-bgc);
     padding: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.sidebarTop > img {
+    height: 25px;
+    width: 25px;
 }
 
 .pastTag {
@@ -15,4 +23,17 @@
     margin: 0 24px;
     margin-top: 8px;
     border-radius: 10px;
+}
+
+.otherChats {
+    padding: 6px auto;
+    border-bottom: 2px solid var(--color-primary);
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+    margin-bottom: 4px;
+}
+
+.otherChats:hover {
+    transform: translateY(-4px);
+    color: var(--color-primary);
 }
