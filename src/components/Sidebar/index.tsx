@@ -1,7 +1,11 @@
 import React from "react";
 import styles from "./sidebar.module.css";
+import { ChatHistory } from "../../App";
 
-const Sidebar: React.FC = () => {
+interface SidebarProps {
+  chatHistory: ChatHistory[];
+}
+const Sidebar: React.FC<SidebarProps> = ({ chatHistory }) => {
   return (
     <div className={styles.sidebar}>
       <div className={styles.sidebarTop}>
@@ -11,11 +15,15 @@ const Sidebar: React.FC = () => {
         <div>{/* new icon here */}</div>
       </div>
 
-      <span className={styles.pastTag}>
-        Past Conversation
-      </span>
+      <span className={styles.pastTag}>Past Conversation</span>
 
       {/* Conversation history here */}
+      {chatHistory
+        .slice()
+        .reverse()
+        .map((history) => {
+          return <span className={styles.pastTag}>{history.name}</span>;
+        })}
     </div>
   );
 };

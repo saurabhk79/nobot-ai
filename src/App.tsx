@@ -18,10 +18,18 @@ export interface ChatInterface {
   isLiked?: boolean | undefined;
 }
 
+export interface ChatHistory {
+  id: number;
+  name?: string;
+  chats: ChatInterface[];
+}
+
 const App: React.FC = () => {
   const [showPlate, setShowPlate] = useState<boolean>(false);
   const [chat, setChat] = useState<ChatInterface[]>([]);
-  const [chatLoading, setChatLoading] = useState(false)
+  const [chatLoading, setChatLoading] = useState(false);
+
+  const [chatHistory, setChatHistory] = useState<ChatHistory[]>([]);
 
   const handleShowPlate = (value: boolean) => {
     setShowPlate(value);
@@ -58,15 +66,48 @@ const App: React.FC = () => {
     // Add bot response to chat state
     setChat((prevState) => [...prevState, botResponseObj]);
   };
+
+  const saveChatHistory = () => {
+    if (chat.length && chatHistory.length) {
+      const currentChatFirstId = chat[0].id;
+      const lastChatFirstId = chatHistory[chatHistory.length - 1].chats[0].id;
+
+      if (currentChatFirstId !== lastChatFirstId) {
+        const newChatHistoryEntry: ChatHistory = {
+          id: chatHistory.length + 1,
+          chats: chat,
+        };
+        setChatHistory([
+          ...chatHistory,
+          {
+            ...newChatHistoryEntry,
+            name: "User Chat" + newChatHistoryEntry.id,
+          },
+        ]);
+      }
+    } else {
+      const newChatHistoryEntry: ChatHistory = {
+        id: 1,
+        chats: chat,
+      };
+      setChatHistory([
+        { ...newChatHistoryEntry, name: "User Chat" + newChatHistoryEntry.id },
+      ]);
+    }
+  };
   return (
     <div className="app">
-      <Sidebar />
+      <Sidebar chatHistory={chatHistory} />
 
       <div className="chat-area">
         <h2>Bot AI</h2>
 
         <StartPlate showPlate={showPlate} chats={chat} />
-        <InputBox addUserChat={addUserChat} chatLoading={chatLoading} />
+        <InputBox
+          addUserChat={addUserChat}
+          chatLoading={chatLoading}
+          saveChatHistory={saveChatHistory}
+        />
       </div>
     </div>
   );

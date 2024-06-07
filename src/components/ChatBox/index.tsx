@@ -19,9 +19,12 @@ const ChatBox: React.FC<ChatBoxInterface> = ({ showPlate, chats }) => {
         <StartPlate />
       ) : (
         <>
-          {chats.map((chat) => {
-            return <Chat data={chat} key={chat.id} />;
-          })}
+          {chats
+            .slice()
+            .reverse()
+            .map((chat) => {
+              return <Chat data={chat} key={chat.id} />;
+            })}
         </>
       )}
     </div>

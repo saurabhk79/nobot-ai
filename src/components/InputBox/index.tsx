@@ -5,9 +5,14 @@ import { ChatInterface } from "../../App";
 interface InputBoxProps {
   addUserChat: (userChatObj: ChatInterface) => void;
   chatLoading: boolean;
+  saveChatHistory: () => void;
 }
 
-const InputBox: React.FC<InputBoxProps> = ({ addUserChat, chatLoading }) => {
+const InputBox: React.FC<InputBoxProps> = ({
+  addUserChat,
+  chatLoading,
+  saveChatHistory,
+}) => {
   const [text, setText] = useState("");
 
   return (
@@ -24,7 +29,7 @@ const InputBox: React.FC<InputBoxProps> = ({ addUserChat, chatLoading }) => {
       >
         Ask
       </button>
-      <button>Save</button>
+      <button onClick={saveChatHistory}>Save</button>
     </div>
   );
 };
